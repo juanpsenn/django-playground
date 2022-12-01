@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from articles.models import Article
+from articles.services import update_article
+from articles.selectors import get_articles_values
 
 # Create your views here.
 
@@ -28,14 +30,18 @@ class UpdateArticleApi(APIView):
         description = request.data.get("description")
         price = request.data.get("price")
 
-        article = Article.objects.get(id=article_id)
-        article.title=title
-        article.description=description
-        article.price=price
-
-        article.save()
+        article = update_article(article_id, title, description, price)
 
         return Response(f"Article: {title}, $ {price} updated successfully!", status=201)
+
+
+class UpdatePriceArticleApi(APIView):
+    def put(self, request, article_id):
+        price = request.data.get("price")
+
+        article = update_article(article_id, price=price)
+
+        return Response(f"Article: {article.title}, $ {price} updated successfully!", status=201)
 
 
 class ListArticlesApi(APIView):
@@ -52,10 +58,6 @@ class ListArticlesApi(APIView):
 
 class GetArticleApi(APIView):
     def get(self, request, article_id):
-        article = Article.objects.filter(id=article_id).values(
-            "title", 
-            "description", 
-            "price",
-        )
+        article = get_articles_values(article_id)
 
         return Response({"article": article[0]}, status=200)
