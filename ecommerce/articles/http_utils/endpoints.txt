@@ -1,0 +1,4 @@
+articles/create/
+articles/update/1/
+articles/list
+articles/get/1
