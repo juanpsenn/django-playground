@@ -5,10 +5,10 @@ def update_article(id, title = None, description = None, price = None):
     article = get_article(id)
 
     if not article:
-        return Response(status=404)
+        raise Exception(f"Article {id} not found")
     
     if price < 0:
-        return Response({"error": "Price should be ge 0."}, status=400)
+        raise Exception("Price should be ge 0.")
 
     if title is not None:
         article.title = title

@@ -1,7 +1,10 @@
 from articles.models import Article
 
 def get_article(id):
-    return Article.objects.get(id=id)
+    try:
+        return Article.objects.get(id=id)
+    except Article.DoesNotExist:
+        return None
 
 
 def get_articles_values(id):
