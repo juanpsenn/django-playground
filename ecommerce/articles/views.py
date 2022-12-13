@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import serializers
 
 from articles.models import Article
-from articles.services import update_article
+from articles.services import update_article, create_article
 from articles.selectors import get_article
 from articles.serializers import ArticleSerializer
 
@@ -11,18 +12,20 @@ from articles.serializers import ArticleSerializer
 
 
 class CreateArticleApi(APIView):
+
+    class InputSerializer(serializers.Serializer):
+        title = serializers.CharField()
+        description = serializers.CharField()
+        price = serializers.DecimalField(decimal_places=2, max_digits=15)
+        author = serializers.CharField()
+
     def post(self, request):
-        title = request.data.get("title")
-        description = request.data.get("description")
-        price = request.data.get("price")
+        _serializer = self.InputSerializer(data=request.data)
+        _serializer.is_valid(raise_exception=True)
+        
+        article = create_article(**_serializer.validated_data)
 
-        article = Article.objects.create(
-            title=title,
-            description=description,
-            price=price,
-        )
-
-        return Response(f"Article: {title}, $ {price} created successfully!", status=201)
+        return Response(f"Article: {article.title}, $ {article.price} created successfully!", status=201)
 
 
 class UpdateArticleApi(APIView):

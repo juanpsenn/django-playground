@@ -4,7 +4,7 @@ from articles.models import Article, Author
 class AuthorSerializer(ModelSerializer):
     class Meta:
         model = Author
-        fields = ["__all__"]
+        fields = "__all__"
 
 
 class ArticleSerializer(ModelSerializer):
