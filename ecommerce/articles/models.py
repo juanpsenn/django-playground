@@ -6,7 +6,7 @@ class Article(models.Model):
     description = models.CharField(max_length=256)
     price = models.DecimalField(decimal_places=2, max_digits=15)
     is_active = models.BooleanField(default=True)
-    # author = models.ForeignKey("Author", on_delete=models.DO_NOTHING)
+    author = models.ForeignKey("Author", on_delete=models.DO_NOTHING, null=True)
 
 class Author(models.Model):
-    pass
+    name= models.CharField(max_length=128)
