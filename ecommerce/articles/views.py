@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from articles.models import Article
 from articles.services import update_article, create_article
-from articles.selectors import get_article
+from articles.selectors import get_article, list_articles
 from articles.serializers import ArticleSerializer
 
 # Create your views here.
@@ -54,7 +54,12 @@ class UpdatePriceArticleApi(APIView):
 
 class ListArticlesApi(APIView):
     def get(self, request):
-        articles = Article.objects.all()
+        query_text = request.query_params.get("query_text")
+        price_a = request.query_params.get("price_a")
+        price_b = request.query_params.get("price_b")
+        is_active = request.query_params.get("is_active") # 1 or 0
+        print(query_text, price_a, price_b, is_active)
+        articles = list_articles(query_text, price_a, price_b, is_active)
         
         return Response({"articles": ArticleSerializer(articles, many=True).data}, status=200)
 
