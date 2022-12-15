@@ -12,7 +12,6 @@ from articles.serializers import ArticleSerializer
 
 
 class CreateArticleApi(APIView):
-
     class InputSerializer(serializers.Serializer):
         title = serializers.CharField()
         description = serializers.CharField()
@@ -22,10 +21,13 @@ class CreateArticleApi(APIView):
     def post(self, request):
         _serializer = self.InputSerializer(data=request.data)
         _serializer.is_valid(raise_exception=True)
-        
+
         article = create_article(**_serializer.validated_data)
 
-        return Response(f"Article: {article.title}, $ {article.price} created successfully!", status=201)
+        return Response(
+            f"Article: {article.title}, $ {article.price} created successfully!",
+            status=201,
+        )
 
 
 class UpdateArticleApi(APIView):
@@ -36,7 +38,9 @@ class UpdateArticleApi(APIView):
 
         article = update_article(article_id, title, description, price)
 
-        return Response(f"Article: {title}, $ {price} updated successfully!", status=201)
+        return Response(
+            f"Article: {title}, $ {price} updated successfully!", status=201
+        )
 
 
 class UpdatePriceArticleApi(APIView):
@@ -45,11 +49,12 @@ class UpdatePriceArticleApi(APIView):
 
         try:
             article = update_article(article_id, price=price)
-            return Response(f"Article: {article.title}, $ {price} updated successfully!", status=201)
+            return Response(
+                f"Article: {article.title}, $ {price} updated successfully!",
+                status=201,
+            )
         except Exception as err:
             return Response({"error": str(err)}, status=200)
-
-
 
 
 class ListArticlesApi(APIView):
@@ -57,15 +62,20 @@ class ListArticlesApi(APIView):
         query_text = request.query_params.get("query_text")
         price_a = request.query_params.get("price_a")
         price_b = request.query_params.get("price_b")
-        is_active = request.query_params.get("is_active") # 1 or 0
-        print(query_text, price_a, price_b, is_active)
+        is_active = request.query_params.get("is_active", True)  # 1 or 0
+
         articles = list_articles(query_text, price_a, price_b, is_active)
-        
-        return Response({"articles": ArticleSerializer(articles, many=True).data}, status=200)
+
+        return Response(
+            {"articles": ArticleSerializer(articles, many=True).data},
+            status=200,
+        )
 
 
 class GetArticleApi(APIView):
     def get(self, request, article_id):
         article = get_article(article_id)
 
-        return Response({"article": ArticleSerializer(article).data}, status=200)
+        return Response(
+            {"article": ArticleSerializer(article).data}, status=200
+        )

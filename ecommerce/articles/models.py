@@ -8,5 +8,6 @@ class Article(models.Model):
     is_active = models.BooleanField(default=True)
     author = models.ForeignKey("Author", on_delete=models.DO_NOTHING, null=True)
 
+
 class Author(models.Model):
-    name= models.CharField(max_length=128)
+    name = models.CharField(max_length=128)

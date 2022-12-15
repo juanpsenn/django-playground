@@ -1,6 +1,7 @@
 from articles.models import Article, Author
 from articles.selectors import get_article, get_author_by_name
 
+
 def create_author(name):
     return Author.objects.create(name=name)
 
@@ -32,11 +33,8 @@ def create_article(*, title, description, price, author):
     _author = get_author_by_name(author)
     if _author is None:
         _author = create_author(author)
-    
+
     article = Article.objects.create(
-        title=title,
-        description=description,
-        price=price,
-        author=_author
+        title=title, description=description, price=price, author=_author
     )
     return article
