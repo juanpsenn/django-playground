@@ -1,6 +1,7 @@
 from articles.models import Article, Author
 from orders.models import Order, OrderDetail
 
+
 def create_order():
     articles = (Article.objects.last(), Article.objects.first())
 
@@ -8,8 +9,12 @@ def create_order():
     details = []
 
     for article in articles:
-        details.append(OrderDetail(article=article, quantity=1, price=article.price, order=order))
-    
+        details.append(
+            OrderDetail(
+                article=article, quantity=1, price=article.price, order=order
+            )
+        )
+
     OrderDetail.objects.bulk_create(details)
-    
+
     return order

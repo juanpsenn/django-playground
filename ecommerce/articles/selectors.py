@@ -1,5 +1,5 @@
 from articles.models import Article, Author
-from django.db.models import Q
+from django.db.models import Q, Avg
 from articles.filters import title_or_description_contains, author_name_contains
 
 
@@ -30,3 +30,15 @@ def get_author_by_name(name):
         return Author.objects.get(name=name)
     except Author.DoesNotExist:
         return None
+
+
+def average_price(articles):
+    # In : average_price([1, 7, 4, 5])
+    # Out: {'price__avg': Decimal('2049.5')}
+
+    # In : average_price([1, 7, 4, 5]).get("price__avg")
+    # Out: Decimal('2049.5')
+
+    # In : average_price([1, 7, 4, 5])["price__avg"]
+    # Out: Decimal('2049.5')
+    return Article.objects.filter(id__in=articles).aggregate(Min("price"))

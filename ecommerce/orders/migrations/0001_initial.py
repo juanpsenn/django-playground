@@ -26,7 +26,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("client", models.BigIntegerField()),
-                ("total_amount", models.DecimalField(decimal_places=2, max_digits=15)),
+                (
+                    "total_amount",
+                    models.DecimalField(decimal_places=2, max_digits=15),
+                ),
             ],
         ),
         migrations.CreateModel(

@@ -3,9 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 
-from articles.models import Article
-from articles.services import update_article, create_article
-from articles.selectors import get_article, list_articles
-from articles.serializers import ArticleSerializer
+from .serializers import OrderSerializer
+from .models import Order, OrderDetail
 
-# Create your views here.
+
+class OrderGetApi(APIView):
+    def get(self, request, order_id):
+        order = Order.objects.get(id=order_id)
+        serializer = OrderSerializer(order)
+        return Response({"data": serializer.data})
