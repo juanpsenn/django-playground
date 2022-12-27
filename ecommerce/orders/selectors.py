@@ -11,6 +11,5 @@ from django.db.models import Q, F
 #         orders.append(detail.order)
 
 def get_order_details(order):
-    return OrderDetail.objects.filter(order_id=order).annotate(
-        current_price=F("article__price")
-    )
+    details = OrderDetail.objects.filter(order_id=order)
+    return current_price(details)
