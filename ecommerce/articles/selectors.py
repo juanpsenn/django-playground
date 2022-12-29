@@ -12,10 +12,7 @@ def get_article(id):
 
 def list_articles(query_text, price_a, price_b, is_active=True):
     return Article.objects.filter(
-        (
-            title_or_description_contains(query_text)
-            | author_name_contains(query_text)
-        )
+        (title_or_description_contains(query_text) | author_name_contains(query_text))
         & Q(is_active=is_active)
         & (
             Q(price__gte=price_a) & Q(price__lte=price_b)

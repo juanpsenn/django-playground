@@ -38,9 +38,7 @@ class UpdateArticleApi(APIView):
 
         article = update_article(article_id, title, description, price)
 
-        return Response(
-            f"Article: {title}, $ {price} updated successfully!", status=201
-        )
+        return Response(f"Article: {title}, $ {price} updated successfully!", status=201)
 
 
 class UpdatePriceArticleApi(APIView):
@@ -76,6 +74,4 @@ class GetArticleApi(APIView):
     def get(self, request, article_id):
         article = get_article(article_id)
 
-        return Response(
-            {"article": ArticleSerializer(article).data}, status=200
-        )
+        return Response({"article": ArticleSerializer(article).data}, status=200)
