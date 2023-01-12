@@ -22,3 +22,4 @@ def list_articles_sold():
         .annotate(sold=Sum("quantity"))
         .values_list("article__title", "sold", "price")
     )
+    

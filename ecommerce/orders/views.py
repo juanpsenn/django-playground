@@ -21,12 +21,17 @@ class OrderGetApi(APIView):
 class ExportXLSX(APIView):
     def get(self, request):
         header = ["Articulo", "Cantidad vendida", "Precio venta"]
-        data = list(list_articles_sold())
-        excel = export_excel_report("Ventas", header, data)
+        sold_articles = list(list_articles_sold())
+        total_amount = 0
+        for article in sold_articles:
+            total_amount += article[2]*article[1]
+        sold_articles.append(["TOTAL: ", " ", str(total_amount)])
+        excel = export_excel_report("Ventas", header, sold_articles)
         # Return the file as an HttpResponse
         response = HttpResponse(
             excel,
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            status=201
         )
         response["Content-Disposition"] = "attachment; filename=Reporte Ventas.xlsx"
         return response
